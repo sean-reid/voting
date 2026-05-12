@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import PreferenceOrdering from "@/components/interactive/PreferenceOrdering";
 import Card from "@/components/ui/Card";
@@ -67,20 +67,21 @@ export default function DictatorDetector() {
     setChecked(true);
   }
 
+  const demoCountRef = useRef(0);
+
   function setDictatorMode(voterIndex: number) {
-    const randomOrdering =
-      ALL_ORDERINGS[Math.floor(Math.random() * ALL_ORDERINGS.length)]!;
+    const pick = demoCountRef.current % ALL_ORDERINGS.length;
+    demoCountRef.current += 1;
+    const dictatorOrdering = ALL_ORDERINGS[pick]!;
+    const otherOptions = ALL_ORDERINGS.filter(
+      (o) => o.join() !== dictatorOrdering.join()
+    );
     const newVoters = voters.map((_v, i) => {
-      if (i === voterIndex) return [...randomOrdering];
-      const otherOptions = ALL_ORDERINGS.filter(
-        (o) => o.join() !== randomOrdering.join()
-      );
-      return [
-        ...otherOptions[Math.floor(Math.random() * otherOptions.length)]!,
-      ];
+      if (i === voterIndex) return [...dictatorOrdering];
+      return [...otherOptions[(i + pick) % otherOptions.length]!];
     });
     setVoters(newVoters);
-    setGroupRanking([...randomOrdering]);
+    setGroupRanking([...dictatorOrdering]);
     setDictatorIndex(voterIndex);
     setChecked(true);
   }
