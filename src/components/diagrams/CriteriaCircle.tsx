@@ -14,17 +14,17 @@ const VIOLATED_COLOR = "#b85c5c";
 const INK_COLOR = "#2d2a26";
 
 const diamondPositions = [
-  { x: 200, y: 40 },
-  { x: 360, y: 150 },
-  { x: 200, y: 260 },
-  { x: 40, y: 150 },
+  { x: 250, y: 40 },
+  { x: 420, y: 150 },
+  { x: 250, y: 260 },
+  { x: 80, y: 150 },
 ];
 
 function getPositions(count: number): { x: number; y: number }[] {
   if (count <= 4) return diamondPositions.slice(0, count);
-  const cx = 200;
+  const cx = 250;
   const cy = 150;
-  const radius = 120;
+  const radius = 160;
   return Array.from({ length: count }, (_, i) => {
     const angle = (2 * Math.PI * i) / count - Math.PI / 2;
     return { x: cx + radius * Math.cos(angle), y: cy + radius * Math.sin(angle) };
@@ -46,9 +46,8 @@ export default function CriteriaCircle({ criteria }: CriteriaCircleProps) {
 
   return (
     <svg
-      width={400}
-      height={300}
-      viewBox="0 0 400 300"
+      viewBox="0 0 500 300"
+      className="w-full max-w-[500px] h-auto"
       role="img"
       aria-label="Criteria diagram"
     >

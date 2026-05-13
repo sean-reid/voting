@@ -13,6 +13,7 @@ import { checkNonDictatorship } from "@/lib/criteria/dictatorship";
 import { plurality } from "@/lib/voting/plurality";
 import { borda } from "@/lib/voting/borda";
 import { irv } from "@/lib/voting/irv";
+import { condorcet } from "@/lib/voting/condorcet";
 import type { CriterionResult } from "@/lib/criteria/types";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
@@ -114,19 +115,19 @@ const SCENARIOS: ProfileScenario[] = [
   },
 ];
 
-type PresetKey = "plurality" | "borda" | "irv" | "custom";
+type PresetKey = "plurality" | "borda" | "irv" | "condorcet";
 
 interface PresetDef {
   key: PresetKey;
   label: string;
-  method: SocialWelfareFunction | null;
+  method: SocialWelfareFunction;
 }
 
 const PRESETS: PresetDef[] = [
   { key: "plurality", label: "Plurality", method: plurality },
   { key: "borda", label: "Borda Count", method: borda },
   { key: "irv", label: "Instant Runoff", method: irv },
-  { key: "custom", label: "Build Your Own", method: null },
+  { key: "condorcet", label: "Condorcet", method: condorcet },
 ];
 
 const ALL_RANKINGS = permutations(CANDIDATES);
@@ -186,7 +187,7 @@ function CandidatePill({ candidate }: { candidate: Candidate }) {
 
 function RankingPills({ ranking }: { ranking: Ranking }) {
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-1 flex-wrap">
       {ranking.map((candidate, i) => (
         <div key={candidate} className="flex items-center gap-1">
           <CandidatePill candidate={candidate} />
@@ -499,14 +500,14 @@ function ProfileCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay: index * 0.05, ease: "easeOut" }}
     >
-      <Card hover>
-        <div className="space-y-4">
+      <Card hover className="!p-4">
+        <div className="space-y-3">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
-              <h3 className="font-serif text-sm font-semibold text-ink truncate">
+              <h3 className="font-serif text-sm font-semibold text-ink leading-snug">
                 {scenario.label}
               </h3>
-              <p className="text-xs text-ink-tertiary mt-0.5">
+              <p className="text-xs text-ink-tertiary mt-0.5 leading-snug">
                 {scenario.description}
               </p>
             </div>
@@ -581,18 +582,13 @@ export default function ImpossibilitySandbox() {
 
   const handlePreset = useCallback(
     (preset: PresetDef) => {
-      if (preset.method) {
-        const newRankings: Record<string, Ranking> = {};
-        for (const scenario of SCENARIOS) {
-          const key = profileKey(scenario.profile);
-          newRankings[key] = preset.method(scenario.profile, CANDIDATES);
-        }
-        setUserRankings(newRankings);
-        setActivePreset(preset.key);
-      } else {
-        setUserRankings({});
-        setActivePreset("custom");
+      const newRankings: Record<string, Ranking> = {};
+      for (const scenario of SCENARIOS) {
+        const key = profileKey(scenario.profile);
+        newRankings[key] = preset.method(scenario.profile, CANDIDATES);
       }
+      setUserRankings(newRankings);
+      setActivePreset(preset.key);
     },
     []
   );
@@ -601,7 +597,7 @@ export default function ImpossibilitySandbox() {
     (scenarioProfile: PreferenceProfile, ranking: Ranking) => {
       const key = profileKey(scenarioProfile);
       setUserRankings((prev) => ({ ...prev, [key]: ranking }));
-      setActivePreset("custom");
+      setActivePreset(null);
     },
     []
   );

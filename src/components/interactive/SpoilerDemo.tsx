@@ -155,10 +155,14 @@ function SpoilerDemo() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex items-center justify-center rounded-xl border-2 border-dashed border-border p-8"
+              className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-surface/50 p-8 gap-3 min-h-[200px]"
             >
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                <circle cx="24" cy="24" r="18" stroke="currentColor" strokeWidth="1.5" strokeDasharray="4 3" className="text-border-strong" />
+                <text x="24" y="25" textAnchor="middle" dominantBaseline="central" fontSize="18" fontWeight="600" className="fill-ink-tertiary">C</text>
+              </svg>
               <p className="text-sm text-ink-tertiary text-center">
-                What happens when candidate C enters?
+                Click below to add candidate C and see what changes.
               </p>
             </motion.div>
           )}

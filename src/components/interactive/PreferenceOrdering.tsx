@@ -4,6 +4,7 @@ import {
   closestCenter,
   KeyboardSensor,
   PointerSensor,
+  TouchSensor,
   useSensor,
   useSensors,
   type DragEndEvent,
@@ -16,7 +17,6 @@ import {
   arrayMove,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { motion, LayoutGroup, AnimatePresence } from "motion/react";
 
 export const candidateColors: Record<string, string> = {
   A: "bg-candidate-a/15 text-candidate-a border-candidate-a/30",
@@ -86,17 +86,15 @@ function SortableItem({ id, rank, colorClass, disabled }: SortableItemProps) {
 
   const style = {
     transform: CSS.Transform.toString(transform) ?? undefined,
-    transition,
+    transition: transition ?? undefined,
   };
 
   return (
-    <motion.div
+    <div
       ref={setNodeRef}
       style={style}
-      layout
-      transition={{ type: "spring", stiffness: 400, damping: 30 }}
-      className={`flex items-center gap-3 rounded-lg border px-3 py-2 select-none ${colorClass} ${
-        isDragging ? "z-10 shadow-lg opacity-90" : ""
+      className={`flex items-center gap-3 rounded-lg border px-3 py-2 select-none transition-shadow ${colorClass} ${
+        isDragging ? "z-10 shadow-lg opacity-90 relative" : ""
       } ${disabled ? "opacity-60" : ""}`}
       role="listitem"
       aria-label={`${ordinal(rank)} choice: ${id}`}
@@ -116,7 +114,7 @@ function SortableItem({ id, rank, colorClass, disabled }: SortableItemProps) {
         {ordinal(rank)}
       </span>
       <span className="font-medium text-sm">{id}</span>
-    </motion.div>
+    </div>
   );
 }
 
@@ -139,7 +137,10 @@ export default function PreferenceOrdering({
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
-      activationConstraint: { distance: 4 },
+      activationConstraint: { distance: 8 },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 200, tolerance: 6 },
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
@@ -167,25 +168,21 @@ export default function PreferenceOrdering({
         onDragEnd={handleDragEnd}
       >
         <SortableContext items={ranking} strategy={verticalListSortingStrategy}>
-          <LayoutGroup>
-            <div
-              role="list"
-              aria-label={`${label} ranking`}
-              className="flex flex-col gap-1.5"
-            >
-              <AnimatePresence>
-                {ranking.map((candidate, index) => (
-                  <SortableItem
-                    key={candidate}
-                    id={candidate}
-                    rank={index + 1}
-                    colorClass={getColor(candidate, candidates.indexOf(candidate))}
-                    disabled={disabled}
-                  />
-                ))}
-              </AnimatePresence>
-            </div>
-          </LayoutGroup>
+          <div
+            role="list"
+            aria-label={`${label} ranking`}
+            className="flex flex-col gap-1.5"
+          >
+            {ranking.map((candidate, index) => (
+              <SortableItem
+                key={candidate}
+                id={candidate}
+                rank={index + 1}
+                colorClass={getColor(candidate, candidates.indexOf(candidate))}
+                disabled={disabled}
+              />
+            ))}
+          </div>
         </SortableContext>
       </DndContext>
     </div>

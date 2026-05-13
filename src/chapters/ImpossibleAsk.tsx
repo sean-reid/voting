@@ -41,7 +41,7 @@ const circleCriteria = [
 export default function ImpossibleAsk() {
   return (
     <Chapter id="impossibility">
-      <Container>
+      <Container wide>
         <h2 className="font-serif text-3xl font-semibold text-ink mb-4 md:text-4xl">
           The impossibility
         </h2>
