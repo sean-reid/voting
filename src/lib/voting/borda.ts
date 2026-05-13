@@ -46,8 +46,12 @@ export function bordaWithDetails(
 ): VotingResult {
   if (candidates.length === 0) return { ranking: [], details: {} };
   const scores = tallyBordaScores(profile, candidates);
+  const ranking = rankByScores(scores, candidates);
+  const maxScore = scores[ranking[0]!] ?? 0;
+  const tiedWinners = ranking.filter((c) => scores[c] === maxScore);
   return {
-    ranking: rankByScores(scores, candidates),
+    ranking,
     details: scores,
+    tiedWinners: tiedWinners.length > 1 ? tiedWinners : undefined,
   };
 }

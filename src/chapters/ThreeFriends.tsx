@@ -25,6 +25,7 @@ export default function ThreeFriends() {
 
   const winner = result.ranking[0] ?? "";
   const winnerVotes = result.details[winner] ?? 0;
+  const isTied = result.tiedWinners !== undefined;
 
   return (
     <Chapter id="three-friends">
@@ -51,22 +52,39 @@ export default function ThreeFriends() {
 
         <AnimatePresence mode="wait">
           <motion.div
-            key={winner}
+            key={isTied ? "tie" : winner}
             className="rounded-xl border border-border bg-surface px-6 py-5"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.35 }}
           >
-            <p className="text-sm font-medium text-ink-tertiary">
-              Plurality winner
-            </p>
-            <p className="mt-1 font-serif text-2xl font-semibold text-ink">
-              {winner}
-            </p>
-            <p className="mt-1 text-sm text-ink-secondary">
-              {winnerVotes} of {voters.length} first-place votes
-            </p>
+            {isTied ? (
+              <>
+                <p className="text-sm font-medium text-ink-tertiary">
+                  Plurality result
+                </p>
+                <p className="mt-1 font-serif text-2xl font-semibold text-terracotta">
+                  Tie
+                </p>
+                <p className="mt-1 text-sm text-ink-secondary">
+                  {result.tiedWinners!.join(", ")} are tied with{" "}
+                  {winnerVotes} vote{winnerVotes !== 1 ? "s" : ""} each
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="text-sm font-medium text-ink-tertiary">
+                  Plurality winner
+                </p>
+                <p className="mt-1 font-serif text-2xl font-semibold text-ink">
+                  {winner}
+                </p>
+                <p className="mt-1 text-sm text-ink-secondary">
+                  {winnerVotes} of {voters.length} first-place votes
+                </p>
+              </>
+            )}
           </motion.div>
         </AnimatePresence>
 

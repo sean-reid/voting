@@ -45,7 +45,11 @@ function VotingSimulator({ profile, candidates, methods }: VotingSimulatorProps)
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-ink-tertiary">Winner:</span>
-                  <Badge variant="terracotta">{winner}</Badge>
+                  {entry.result.tiedWinners ? (
+                    <Badge variant="muted-red">Tie</Badge>
+                  ) : (
+                    <Badge variant="terracotta">{winner}</Badge>
+                  )}
                 </div>
                 <div
                   className="space-y-2"

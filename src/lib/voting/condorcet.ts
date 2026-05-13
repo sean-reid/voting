@@ -82,5 +82,11 @@ export function condorcetWithDetails(
     return a.localeCompare(b);
   });
 
-  return { ranking, details: wins };
+  const topWins = wins[ranking[0]!] ?? 0;
+  const tiedWinners = ranking.filter((c) => wins[c] === topWins);
+  return {
+    ranking,
+    details: wins,
+    tiedWinners: tiedWinners.length > 1 ? tiedWinners : undefined,
+  };
 }

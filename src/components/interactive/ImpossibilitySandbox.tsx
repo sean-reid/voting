@@ -499,9 +499,10 @@ function ProfileCard({
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay: index * 0.05, ease: "easeOut" }}
+      className="h-full"
     >
-      <Card hover className="!p-4">
-        <div className="space-y-3">
+      <Card hover className="!p-4 h-full">
+        <div className="space-y-3 h-full flex flex-col">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
               <h3 className="font-serif text-sm font-semibold text-ink leading-snug">
@@ -538,7 +539,7 @@ function ProfileCard({
             ))}
           </div>
 
-          <div className="pt-1 border-t border-border">
+          <div className="pt-1 border-t border-border mt-auto">
             <p className="text-xs font-medium text-ink-secondary mb-2">
               Group outcome
             </p>

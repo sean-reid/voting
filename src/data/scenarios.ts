@@ -11,7 +11,7 @@ export const restaurantScenario: Scenario = {
   candidates: ["Sushi Place", "Pizza Joint", "Taco Spot"],
   voters: [
     { name: "Alice", ranking: ["Sushi Place", "Pizza Joint", "Taco Spot"] },
-    { name: "Bob", ranking: ["Taco Spot", "Sushi Place", "Pizza Joint"] },
+    { name: "Bob", ranking: ["Pizza Joint", "Sushi Place", "Taco Spot"] },
     { name: "Carol", ranking: ["Pizza Joint", "Taco Spot", "Sushi Place"] },
   ],
 };

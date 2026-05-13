@@ -101,8 +101,12 @@ export function irvWithDetails(
     details[winner] = profile.length;
   }
 
+  const ranking = eliminationOrder.reverse();
+  const topScore = details[ranking[0]!] ?? 0;
+  const tiedWinners = ranking.filter((c) => details[c] === topScore);
   return {
-    ranking: eliminationOrder.reverse(),
+    ranking,
     details,
+    tiedWinners: tiedWinners.length > 1 ? tiedWinners : undefined,
   };
 }

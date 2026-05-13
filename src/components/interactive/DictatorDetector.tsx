@@ -41,31 +41,20 @@ function detectDictator(
 
 export default function DictatorDetector() {
   const [voters, setVoters] = useState(INITIAL_VOTERS);
-  const [, setDictatorIndex] = useState<number | null>(null);
   const [groupRanking, setGroupRanking] = useState<string[]>(CANDIDATES);
-  const [checked, setChecked] = useState(false);
 
   function updateVoter(index: number, newRanking: string[]) {
     setVoters((prev) => prev.map((r, i) => (i === index ? newRanking : r)));
-    setChecked(false);
-    setDictatorIndex(null);
   }
 
   function updateGroup(newRanking: string[]) {
     setGroupRanking(newRanking);
-    setChecked(false);
-    setDictatorIndex(null);
   }
 
-  const checkResult = useMemo(() => {
-    if (!checked) return null;
-    return detectDictator(voters, groupRanking);
-  }, [checked, voters, groupRanking]);
-
-  function handleCheck() {
-    setDictatorIndex(detectDictator(voters, groupRanking));
-    setChecked(true);
-  }
+  const checkResult = useMemo(
+    () => detectDictator(voters, groupRanking),
+    [voters, groupRanking]
+  );
 
   const demoCountRef = useRef(0);
 
@@ -82,8 +71,6 @@ export default function DictatorDetector() {
     });
     setVoters(newVoters);
     setGroupRanking([...dictatorOrdering]);
-    setDictatorIndex(voterIndex);
-    setChecked(true);
   }
 
   return (
@@ -114,59 +101,49 @@ export default function DictatorDetector() {
         </div>
       </Card>
 
-      <div className="flex flex-wrap items-center gap-3">
-        <button
-          type="button"
-          onClick={handleCheck}
-          className="inline-flex items-center rounded-lg bg-terracotta px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-terracotta/90"
-        >
-          Check for dictator
-        </button>
-        <div className="flex gap-2">
-          {voters.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => setDictatorMode(i)}
-              className="inline-flex items-center rounded-lg border border-border bg-surface px-3 py-2 text-xs font-medium text-ink-secondary transition-colors hover:bg-surface-hover"
-            >
-              Make Voter {i + 1} dictator
-            </button>
-          ))}
-        </div>
+      <div className="flex flex-wrap items-center gap-2">
+        {voters.map((_, i) => (
+          <button
+            key={i}
+            type="button"
+            onClick={() => setDictatorMode(i)}
+            className="inline-flex items-center rounded-lg border border-border bg-surface px-3 py-2 text-xs font-medium text-ink-secondary transition-colors hover:bg-surface-hover"
+          >
+            Make Voter {i + 1} dictator
+          </button>
+        ))}
       </div>
 
-      <AnimatePresence>
-        {checked && (
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
-            transition={{ duration: 0.3 }}
-          >
-            {checkResult !== null ? (
-              <div className="rounded-lg border border-muted-red/30 bg-muted-red/5 px-4 py-3">
-                <div className="flex items-center gap-2">
-                  <Badge variant="muted-red">Dictator found</Badge>
-                  <span className="text-sm text-muted-red-dark">
-                    Voter {checkResult + 1}'s preference is always the group
-                    outcome, regardless of what the others want.
-                  </span>
-                </div>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={checkResult !== null ? `dictator-${checkResult}` : "none"}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 8 }}
+          transition={{ duration: 0.3 }}
+        >
+          {checkResult !== null ? (
+            <div className="rounded-lg border border-muted-red/30 bg-muted-red/5 px-4 py-3">
+              <div className="flex items-center gap-2">
+                <Badge variant="muted-red">Dictator found</Badge>
+                <span className="text-sm text-muted-red-dark">
+                  Voter {checkResult + 1}'s preference is always the group
+                  outcome, regardless of what the others want.
+                </span>
               </div>
-            ) : (
-              <div className="rounded-lg border border-sage/30 bg-sage/5 px-4 py-3">
-                <div className="flex items-center gap-2">
-                  <Badge variant="sage">No dictator</Badge>
-                  <span className="text-sm text-sage-dark">
-                    No single voter's preference fully determines the group
-                    ranking here.
-                  </span>
-                </div>
+            </div>
+          ) : (
+            <div className="rounded-lg border border-sage/30 bg-sage/5 px-4 py-3">
+              <div className="flex items-center gap-2">
+                <Badge variant="sage">No dictator</Badge>
+                <span className="text-sm text-sage-dark">
+                  No single voter's preference fully determines the group
+                  ranking here.
+                </span>
               </div>
-            )}
-          </motion.div>
-        )}
+            </div>
+          )}
+        </motion.div>
       </AnimatePresence>
     </div>
   );

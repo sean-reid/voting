@@ -59,8 +59,12 @@ export function pluralityWithDetails(
 ): VotingResult {
   if (candidates.length === 0) return { ranking: [], details: {} };
   const votes = tallyFirstPlaceVotes(profile, candidates);
+  const ranking = rankByVotes(votes, candidates, profile);
+  const maxVotes = votes[ranking[0]!] ?? 0;
+  const tiedWinners = ranking.filter((c) => votes[c] === maxVotes);
   return {
-    ranking: rankByVotes(votes, candidates, profile),
+    ranking,
     details: votes,
+    tiedWinners: tiedWinners.length > 1 ? tiedWinners : undefined,
   };
 }
