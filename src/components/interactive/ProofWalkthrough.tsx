@@ -679,77 +679,57 @@ function ContradictionDiagram() {
         transition={{ delay: 0.8, duration: 0.5 }}
       >
         <text
-          x={200}
-          y={290}
-          textAnchor="middle"
-          className="fill-muted-red"
-          fontSize="18"
-          fontFamily="var(--font-serif)"
-          fontWeight="700"
-          letterSpacing="0.05em"
-        >
-          Contradiction
-        </text>
-        <motion.line
-          x1={140}
-          y1={296}
-          x2={260}
-          y2={296}
-          className="stroke-muted-red/40"
-          strokeWidth="1"
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ delay: 1.1, duration: 0.4 }}
-        />
-      </motion.g>
-
-      <motion.g
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.0, duration: 0.5 }}
-      >
-        <text
-          x={128}
-          y={275}
+          x={148}
+          y={272}
           textAnchor="middle"
           className="fill-terracotta"
-          fontSize="10"
+          fontSize="11"
           fontFamily="var(--font-sans)"
           fontWeight="600"
         >
           Pivotal Voter
         </text>
-        <line
-          x1={168}
-          y1={272}
-          x2={220}
-          y2={272}
-          className="stroke-ink-tertiary"
-          strokeWidth="1.5"
-          strokeDasharray="4 2"
-        />
         <text
-          x={260}
-          y={275}
+          x={200}
+          y={272}
+          textAnchor="middle"
+          className="fill-ink-tertiary"
+          fontSize="11"
+          fontFamily="var(--font-sans)"
+          fontWeight="500"
+        >
+          =
+        </text>
+        <text
+          x={248}
+          y={272}
           textAnchor="middle"
           className="fill-muted-red"
-          fontSize="10"
+          fontSize="11"
           fontFamily="var(--font-sans)"
           fontWeight="600"
         >
-          = Dictator
+          Dictator
         </text>
-        <motion.line
-          x1={105}
-          y1={275}
-          x2={290}
-          y2={275}
-          className="stroke-muted-red/60"
-          strokeWidth="1.5"
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ delay: 1.3, duration: 0.4 }}
-        />
+      </motion.g>
+
+      <motion.g
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.1, duration: 0.5 }}
+      >
+        <text
+          x={200}
+          y={296}
+          textAnchor="middle"
+          className="fill-muted-red"
+          fontSize="15"
+          fontFamily="var(--font-serif)"
+          fontWeight="700"
+          letterSpacing="0.04em"
+        >
+          Contradiction
+        </text>
       </motion.g>
     </svg>
   );
