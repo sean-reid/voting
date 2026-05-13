@@ -82,7 +82,7 @@ describe("checkNonDictatorship", () => {
     const result = checkNonDictatorship(dictator, candidates);
     expect(result.satisfied).toBe(false);
     expect(result.counterexample).toBeDefined();
-    expect(result.counterexample!.description).toContain("Voter 0");
+    expect(result.counterexample!.description).toContain("Voter 1");
   });
 
   it("second-voter dictator is detected", () => {
@@ -91,6 +91,6 @@ describe("checkNonDictatorship", () => {
     }
     const result = checkNonDictatorship(dictator1, candidates);
     expect(result.satisfied).toBe(false);
-    expect(result.counterexample!.description).toContain("Voter 1");
+    expect(result.counterexample!.description).toContain("Voter 2");
   });
 });

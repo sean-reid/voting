@@ -45,7 +45,7 @@ export function checkPareto(
           return {
             satisfied: false,
             counterexample: {
-              description: `All voters rank ${a} above ${b}, but the SWF does not`,
+              description: `All voters rank ${a} above ${b}, but the group ranking does not`,
               profile,
               result,
             },
@@ -57,7 +57,7 @@ export function checkPareto(
           return {
             satisfied: false,
             counterexample: {
-              description: `All voters rank ${b} above ${a}, but the SWF does not`,
+              description: `All voters rank ${b} above ${a}, but the group ranking does not`,
               profile,
               result,
             },

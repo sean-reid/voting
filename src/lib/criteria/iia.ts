@@ -64,7 +64,7 @@ export function checkIIA(
             return {
               satisfied: false,
               counterexample: {
-                description: `All voters rank ${a} vs ${b} the same in both profiles, but the SWF disagrees`,
+                description: `All voters rank ${a} vs ${b} the same in both profiles, but the group ranking disagrees`,
                 profile: profiles[p1]!,
                 profile2: profiles[p2]!,
                 result: results[p1]!,

@@ -46,7 +46,7 @@ export function checkNonDictatorship(
       return {
         satisfied: false,
         counterexample: {
-          description: `Voter ${voter} is a dictator: the SWF always matches their ranking`,
+          description: `Voter ${voter + 1} is a dictator: the group ranking always matches theirs`,
         },
       };
     }

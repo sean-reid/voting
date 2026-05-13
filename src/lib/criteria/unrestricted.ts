@@ -41,7 +41,7 @@ export function checkUnrestrictedDomain(
         return {
           satisfied: false,
           counterexample: {
-            description: `SWF returned an invalid ranking: [${result.join(", ")}]`,
+            description: `Returned an invalid ranking: [${result.join(", ")}]`,
             profile,
             result,
           },
@@ -51,7 +51,7 @@ export function checkUnrestrictedDomain(
       return {
         satisfied: false,
         counterexample: {
-          description: `SWF threw an error for the given profile`,
+          description: `Crashed on this profile`,
           profile,
         },
       };
