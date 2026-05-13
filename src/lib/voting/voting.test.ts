@@ -40,9 +40,10 @@ describe("classic Arrow scenario", () => {
     expect(result).toHaveLength(3);
   });
 
-  it("approval produces a result with all candidates", () => {
-    const result = approval(profile, candidates);
-    expect(result).toHaveLength(3);
+  it("approval reports a three-way tie", () => {
+    const result = approvalWithDetails(profile, candidates);
+    expect(result.tiedWinners).toBeDefined();
+    expect(result.tiedWinners).toHaveLength(3);
   });
 });
 
@@ -235,6 +236,17 @@ describe("tie scenarios", () => {
     const result = condorcetWithDetails(profile, candidates);
     expect(result.tiedWinners).toBeDefined();
     expect(result.tiedWinners).toHaveLength(3);
+  });
+
+  it("approval reports a two-way tie", () => {
+    const profile = [
+      [A, B, C],
+      [B, A, C],
+    ];
+    const result = approvalWithDetails(profile, candidates);
+    expect(result.tiedWinners).toBeDefined();
+    expect(result.tiedWinners).toContain(A);
+    expect(result.tiedWinners).toContain(B);
   });
 });
 

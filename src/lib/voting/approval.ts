@@ -48,8 +48,12 @@ export function approvalWithDetails(
 ): VotingResult {
   if (candidates.length === 0) return { ranking: [], details: {} };
   const approvals = tallyApprovals(profile, candidates);
+  const ranking = rankByApprovals(approvals, candidates);
+  const maxApprovals = approvals[ranking[0]!] ?? 0;
+  const tiedWinners = ranking.filter((c) => approvals[c] === maxApprovals);
   return {
-    ranking: rankByApprovals(approvals, candidates),
+    ranking,
     details: approvals,
+    tiedWinners: tiedWinners.length > 1 ? tiedWinners : undefined,
   };
 }

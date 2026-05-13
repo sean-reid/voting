@@ -72,12 +72,14 @@ function ElectionPanel({ title, voters, candidates, highlight }: PanelProps) {
           {result.ranking.map((candidate) => {
             const score = result.details[candidate] ?? 0;
             const pct = (score / maxScore) * 100;
-            const isWinner = candidate === winner;
+            const isTied = result.tiedWinners?.includes(candidate);
+            const isWinner = !result.tiedWinners && candidate === winner;
+            const highlighted = isWinner || isTied;
             return (
               <div key={candidate} className="space-y-0.5">
                 <div className="flex items-center justify-between text-xs">
                   <span
-                    className={isWinner ? "font-semibold text-terracotta" : "text-ink-secondary"}
+                    className={highlighted ? "font-semibold text-terracotta" : "text-ink-secondary"}
                   >
                     {candidate}
                   </span>
@@ -88,7 +90,7 @@ function ElectionPanel({ title, voters, candidates, highlight }: PanelProps) {
                 <div className="h-2 rounded-full bg-surface-hover overflow-hidden">
                   <motion.div
                     className={`h-full rounded-full ${
-                      isWinner ? "bg-terracotta" : "bg-slate-light"
+                      highlighted ? "bg-terracotta" : "bg-slate-light"
                     }`}
                     initial={{ width: 0 }}
                     animate={{ width: `${pct}%` }}
@@ -100,7 +102,11 @@ function ElectionPanel({ title, voters, candidates, highlight }: PanelProps) {
           })}
           <div className="flex items-center gap-2 pt-1">
             <span className="text-xs text-ink-tertiary">Winner:</span>
-            <Badge variant={highlight ? "muted-red" : "terracotta"}>{winner}</Badge>
+            {result.tiedWinners ? (
+              <Badge variant="muted-red">Tie</Badge>
+            ) : (
+              <Badge variant={highlight ? "muted-red" : "terracotta"}>{winner}</Badge>
+            )}
           </div>
         </div>
       </div>
@@ -122,7 +128,9 @@ function SpoilerDemo() {
 
   const originalWinner = twoCandResult.ranking[0];
   const newWinner = threeCandResult.ranking[0];
-  const winnerChanged = showThirdCandidate && originalWinner !== newWinner;
+  const threeCandTied = threeCandResult.tiedWinners !== undefined;
+  const spoilerEffect =
+    showThirdCandidate && (originalWinner !== newWinner || threeCandTied);
 
   return (
     <div className="space-y-4">
@@ -146,7 +154,7 @@ function SpoilerDemo() {
                 title="A vs B vs C"
                 voters={VOTERS_THREE_CANDIDATE}
                 candidates={["A", "B", "C"]}
-                highlight={winnerChanged}
+                highlight={spoilerEffect}
               />
             </motion.div>
           ) : (
@@ -181,7 +189,7 @@ function SpoilerDemo() {
           {showThirdCandidate ? "Remove candidate C" : "Add candidate C"}
         </Button>
         <AnimatePresence>
-          {winnerChanged && (
+          {spoilerEffect && (
             <motion.p
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
@@ -190,9 +198,9 @@ function SpoilerDemo() {
               className="text-sm text-muted-red-dark text-center rounded-lg border border-muted-red/30 bg-muted-red/5 px-4 py-2"
               role="alert"
             >
-              Adding C changed the winner from {originalWinner} to {newWinner},
-              even though voters still prefer {originalWinner} over {newWinner}
-              in head-to-head comparison.
+              {threeCandTied
+                ? `Adding C created a tie between ${threeCandResult.tiedWinners!.join(" and ")}, even though ${originalWinner} wins head-to-head.`
+                : `Adding C changed the winner from ${originalWinner} to ${newWinner}, even though voters still prefer ${originalWinner} over ${newWinner} in head-to-head comparison.`}
             </motion.p>
           )}
         </AnimatePresence>

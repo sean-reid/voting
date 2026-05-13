@@ -71,14 +71,14 @@ export default function ImpossibleAsk() {
 
         <CriteriaCircle criteria={circleCriteria} />
 
-        <p className="text-ink-secondary leading-relaxed mt-12 mb-8">
+      </Container>
+
+      <Container wide>
+        <p className="text-ink-secondary leading-relaxed mt-12 mb-8 max-w-[48rem] mx-auto">
           Try building a voting rule yourself. Choose how each preference
           profile should be resolved. The checker will test your rule against
           all four criteria.
         </p>
-      </Container>
-
-      <Container wide>
         <ImpossibilitySandbox />
       </Container>
     </Chapter>
