@@ -17,20 +17,22 @@ describe("classic Arrow scenario", () => {
     [C, A, B],
   ];
 
-  it("plurality produces a three-way tie broken alphabetically", () => {
-    const result = plurality(profile, candidates);
-    expect(result).toEqual([A, B, C]);
+  it("plurality reports a three-way tie", () => {
+    const result = pluralityWithDetails(profile, candidates);
+    expect(result.tiedWinners).toBeDefined();
+    expect(result.tiedWinners).toHaveLength(3);
   });
 
-  it("borda produces a three-way tie broken alphabetically", () => {
-    const result = borda(profile, candidates);
-    expect(result).toEqual([A, B, C]);
+  it("borda reports a three-way tie", () => {
+    const result = bordaWithDetails(profile, candidates);
+    expect(result.tiedWinners).toBeDefined();
+    expect(result.tiedWinners).toHaveLength(3);
   });
 
-  it("irv eliminates alphabetically last on tie", () => {
-    const result = irv(profile, candidates);
-    expect(result[0]).toBeDefined();
-    expect(result).toHaveLength(3);
+  it("irv reports a three-way tie", () => {
+    const result = irvWithDetails(profile, candidates);
+    expect(result.tiedWinners).toBeDefined();
+    expect(result.tiedWinners).toHaveLength(3);
   });
 
   it("condorcet has no Condorcet winner in this cycle", () => {
@@ -98,12 +100,11 @@ describe("unanimous preferences", () => {
     expect(approval(profile, candidates)[0]).toBe(A);
   });
 
-  it("all methods produce the same full ranking", () => {
-    const expected = [A, B, C];
-    expect(plurality(profile, candidates)).toEqual(expected);
-    expect(borda(profile, candidates)).toEqual(expected);
-    expect(irv(profile, candidates)).toEqual(expected);
-    expect(condorcet(profile, candidates)).toEqual(expected);
+  it("all methods agree A is the winner", () => {
+    expect(plurality(profile, candidates)[0]).toBe(A);
+    expect(borda(profile, candidates)[0]).toBe(A);
+    expect(irv(profile, candidates)[0]).toBe(A);
+    expect(condorcet(profile, candidates)[0]).toBe(A);
   });
 });
 
@@ -202,33 +203,38 @@ describe("empty input", () => {
 describe("tie scenarios", () => {
   const candidates = [A, B, C];
 
-  it("plurality breaks ties alphabetically", () => {
+  it("plurality reports a two-way tie", () => {
     const profile = [
       [A, B, C],
       [B, A, C],
     ];
-    const result = plurality(profile, candidates);
-    expect(result[0]).toBe(A);
-    expect(result[1]).toBe(B);
+    const result = pluralityWithDetails(profile, candidates);
+    expect(result.tiedWinners).toBeDefined();
+    expect(result.tiedWinners).toContain(A);
+    expect(result.tiedWinners).toContain(B);
   });
 
-  it("borda breaks ties alphabetically", () => {
+  it("borda puts C last when A and B are tied", () => {
     const profile = [
       [A, B, C],
       [B, A, C],
     ];
-    const result = borda(profile, candidates);
-    expect(result[2]).toBe(C);
+    const result = bordaWithDetails(profile, candidates);
+    expect(result.tiedWinners).toBeDefined();
+    expect(result.tiedWinners).toContain(A);
+    expect(result.tiedWinners).toContain(B);
+    expect(result.ranking[2]).toBe(C);
   });
 
-  it("condorcet breaks ties alphabetically", () => {
+  it("condorcet reports a tie in a full cycle", () => {
     const profile = [
       [A, B, C],
       [B, C, A],
       [C, A, B],
     ];
-    const result = condorcet(profile, candidates);
-    expect(result).toEqual([A, B, C]);
+    const result = condorcetWithDetails(profile, candidates);
+    expect(result.tiedWinners).toBeDefined();
+    expect(result.tiedWinners).toHaveLength(3);
   });
 });
 

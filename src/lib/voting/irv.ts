@@ -30,6 +30,24 @@ export function irv(
   while (remaining.size > 1) {
     const votes = countFirstPlace(profile, remaining);
 
+    const total = profile.length;
+    let majorityWinner: string | null = null;
+    for (const c of remaining) {
+      if (votes[c]! > total / 2) {
+        majorityWinner = c;
+        break;
+      }
+    }
+
+    if (majorityWinner !== null) {
+      const losers = [...remaining]
+        .filter((c) => c !== majorityWinner)
+        .sort((a, b) => (votes[a] ?? 0) - (votes[b] ?? 0));
+      for (const l of losers) eliminationOrder.push(l);
+      eliminationOrder.push(majorityWinner);
+      return eliminationOrder.reverse();
+    }
+
     let minVotes = Infinity;
     for (const c of remaining) {
       if (votes[c]! < minVotes) {
@@ -37,11 +55,15 @@ export function irv(
       }
     }
 
-    const tied = [...remaining]
-      .filter((c) => votes[c]! === minVotes)
-      .sort((a, b) => a.localeCompare(b));
+    const lastPlace = [...remaining].filter((c) => votes[c]! === minVotes);
 
-    const eliminated = tied[tied.length - 1]!;
+    if (lastPlace.length === remaining.size) {
+      const sorted = lastPlace.sort((a, b) => (votes[b] ?? 0) - (votes[a] ?? 0));
+      for (const c of sorted) eliminationOrder.push(c);
+      return eliminationOrder.reverse();
+    }
+
+    const eliminated = lastPlace[lastPlace.length - 1]!;
     remaining.delete(eliminated);
     eliminationOrder.push(eliminated);
   }
@@ -68,9 +90,28 @@ export function irvWithDetails(
   const eliminationOrder: string[] = [];
   let finalVotes: Record<string, number> = {};
 
+
   while (remaining.size > 1) {
     const votes = countFirstPlace(profile, remaining);
     finalVotes = votes;
+
+    const total = profile.length;
+    let majorityWinner: string | null = null;
+    for (const c of remaining) {
+      if (votes[c]! > total / 2) {
+        majorityWinner = c;
+        break;
+      }
+    }
+
+    if (majorityWinner !== null) {
+      const losers = [...remaining]
+        .filter((c) => c !== majorityWinner)
+        .sort((a, b) => (votes[a] ?? 0) - (votes[b] ?? 0));
+      for (const l of losers) eliminationOrder.push(l);
+      eliminationOrder.push(majorityWinner);
+      break;
+    }
 
     let minVotes = Infinity;
     for (const c of remaining) {
@@ -79,26 +120,22 @@ export function irvWithDetails(
       }
     }
 
-    const tied = [...remaining]
-      .filter((c) => votes[c]! === minVotes)
-      .sort((a, b) => a.localeCompare(b));
+    const lastPlace = [...remaining].filter((c) => votes[c]! === minVotes);
 
-    const eliminated = tied[tied.length - 1]!;
+    if (lastPlace.length === remaining.size) {
+      const sorted = lastPlace.sort((a, b) => (votes[b] ?? 0) - (votes[a] ?? 0));
+      for (const c of sorted) eliminationOrder.push(c);
+      break;
+    }
+
+    const eliminated = lastPlace[lastPlace.length - 1]!;
     remaining.delete(eliminated);
     eliminationOrder.push(eliminated);
   }
 
-  const winner = [...remaining][0]!;
-  eliminationOrder.push(winner);
-
   const details: Record<string, number> = {};
   for (const candidate of candidates) {
     details[candidate] = finalVotes[candidate] ?? 0;
-  }
-  if (winner in finalVotes) {
-    details[winner] = finalVotes[winner]!;
-  } else {
-    details[winner] = profile.length;
   }
 
   const ranking = eliminationOrder.reverse();

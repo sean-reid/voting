@@ -59,7 +59,9 @@ function VotingSimulator({ profile, candidates, methods }: VotingSimulatorProps)
                   {sortedCandidates.map((candidate, candIndex) => {
                     const score = entry.result.details[candidate] ?? 0;
                     const widthPercent = (score / maxScore) * 100;
-                    const isWinner = candidate === winner;
+                    const isTied = entry.result.tiedWinners?.includes(candidate);
+                    const isWinner = !entry.result.tiedWinners && candidate === winner;
+                    const highlighted = isWinner || isTied;
 
                     return (
                       <div
@@ -71,7 +73,7 @@ function VotingSimulator({ profile, candidates, methods }: VotingSimulatorProps)
                         <div className="flex items-center justify-between text-xs">
                           <span
                             className={`font-medium ${
-                              isWinner ? "text-terracotta" : "text-ink-secondary"
+                              highlighted ? "text-terracotta" : "text-ink-secondary"
                             }`}
                           >
                             {candidate}
@@ -83,7 +85,7 @@ function VotingSimulator({ profile, candidates, methods }: VotingSimulatorProps)
                         <div className="h-2 rounded-full bg-surface-hover overflow-hidden">
                           <motion.div
                             className={`h-full rounded-full ${
-                              isWinner ? "bg-terracotta" : "bg-slate-light"
+                              highlighted ? "bg-terracotta" : "bg-slate-light"
                             }`}
                             initial={{ width: 0 }}
                             animate={{ width: `${widthPercent}%` }}
