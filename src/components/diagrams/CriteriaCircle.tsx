@@ -102,11 +102,18 @@ export default function CriteriaCircle({ criteria }: CriteriaCircleProps) {
               width={cardWidth}
               height={cardHeight}
               rx={rx}
+              fill="#fdfaf6"
+            />
+            <rect
+              x={pos.x - cardWidth / 2}
+              y={pos.y - cardHeight / 2}
+              width={cardWidth}
+              height={cardHeight}
+              rx={rx}
               fill={color}
               fillOpacity={0.12}
               stroke={color}
               strokeWidth={criterion.satisfied ? 2 : 1.5}
-              filter={criterion.satisfied ? "url(#criteria-glow-satisfied)" : undefined}
             />
             <text
               x={pos.x}
