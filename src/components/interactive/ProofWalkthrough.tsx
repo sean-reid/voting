@@ -805,10 +805,11 @@ function ProofWalkthrough() {
   return (
     <Card className="overflow-hidden" padding={false}>
       <div
-        className="p-6 md:p-8"
+        className="p-6 md:p-8 focus-visible:outline-none"
         role="region"
         aria-label="Arrow's impossibility proof walkthrough"
         aria-roledescription="step-by-step walkthrough"
+        tabIndex={0}
         onKeyDown={handleKeyDown}
       >
         <div className="flex items-center justify-between mb-6">
