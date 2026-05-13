@@ -75,9 +75,12 @@ export default function ImpossibleAsk() {
 
       <Container wide>
         <p className="text-ink-secondary leading-relaxed mt-12 mb-8 max-w-[48rem] mx-auto">
-          Try building a voting rule yourself. Choose how each preference
-          profile should be resolved. The checker will test your rule against
-          all four criteria.
+          Try building a voting rule yourself. Arrow's theorem requires a
+          strict ranking (no ties) for every possible set of preferences. Pick
+          a preset method or define your own group rankings, then watch the
+          criteria checker test your rule against all four criteria. When a
+          method produces a tie, you must choose a resolution to complete the
+          rule.
         </p>
         <ImpossibilitySandbox />
       </Container>

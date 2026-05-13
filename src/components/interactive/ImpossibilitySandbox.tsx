@@ -666,16 +666,6 @@ export default function ImpossibilitySandbox() {
   return (
     <div className="space-y-8" role="region" aria-label="Impossibility Theorem Sandbox">
       <div className="space-y-3">
-        <p className="text-sm text-ink-secondary leading-relaxed max-w-2xl">
-          Arrow's theorem requires a voting rule that produces a strict ranking
-          (no ties) for every possible set of preferences. Pick a preset method
-          or define your own group rankings, then watch the criteria checker.
-          When a method produces a tie, you must choose a resolution to
-          complete the rule.
-        </p>
-      </div>
-
-      <div className="space-y-3">
         <p className="text-xs font-medium text-ink-tertiary uppercase tracking-wide">
           Start with a method
         </p>
