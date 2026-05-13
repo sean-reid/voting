@@ -512,7 +512,7 @@ function ProfileCard({
               <h3 className="text-sm font-semibold text-ink leading-snug">
                 {scenario.label}
               </h3>
-              <p className="text-xs text-ink-tertiary mt-0.5 leading-snug">
+              <p className="text-xs text-ink-tertiary mt-0.5 leading-snug min-h-[2lh]">
                 {scenario.description}
               </p>
             </div>
