@@ -86,6 +86,6 @@ export const votingMethodsInfo: VotingMethodInfo[] = [
       nonDictatorship: true,
     },
     note:
-      "Not a ranked system, so Arrow's theorem does not directly apply. Satisfies IIA within its own framework.",
+      "Not a ranked system, so Arrow's theorem does not directly apply. Satisfies IIA when voters score each candidate on an absolute scale.",
   },
 ];

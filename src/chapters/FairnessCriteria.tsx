@@ -6,6 +6,7 @@ import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import SpoilerDemo from "@/components/interactive/SpoilerDemo";
 import DictatorDetector from "@/components/interactive/DictatorDetector";
+import Cite from "@/components/ui/Cite";
 
 const ALL_ORDERINGS = [
   ["A", "B", "C"],
@@ -174,8 +175,9 @@ export default function FairnessCriteria() {
           What would a fair system look like?
         </h2>
         <p className="mb-16 max-w-prose text-ink-secondary">
-          Before Arrow's theorem, let's define what "fair" might mean. Here are
-          four reasonable-sounding properties.
+          Before Arrow's theorem, let's define what "fair" might mean. Arrow
+          identified four reasonable-sounding
+          properties. <Cite id="arrow-1951" /> <Cite id="sep-arrows-theorem" />
         </p>
 
         <div className="space-y-20">

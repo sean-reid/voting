@@ -2,6 +2,7 @@ import Chapter from "@/components/layout/Chapter";
 import Container from "@/components/layout/Container";
 import ComparisonMatrix from "@/components/interactive/ComparisonMatrix";
 import Card from "@/components/ui/Card";
+import Cite from "@/components/ui/Cite";
 
 export default function TradeOffs() {
   return (
@@ -24,13 +25,15 @@ export default function TradeOffs() {
         <div className="max-w-[48rem]">
           <p className="text-ink-secondary leading-relaxed mb-6">
             Approval voting and score voting fall outside the scope of Arrow's
-            theorem because they do not use strict rankings. They come with
-            their own trade-offs.
+            theorem because they use cardinal rather than ordinal
+            input. <Cite id="balinski-laraki-2010" /> They come with their own
+            trade-offs.
           </p>
 
           <p className="text-ink leading-relaxed">
-            Every voting system involves trade-offs. Understanding what each
-            system gives up is the starting point for choosing one.
+            Every voting system involves
+            trade-offs. <Cite id="sen-1970" /> <Cite id="saari-2001" /> Understanding
+            what each system gives up is the starting point for choosing one.
           </p>
         </div>
       </Container>

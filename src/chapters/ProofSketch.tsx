@@ -4,6 +4,7 @@ import Chapter from "@/components/layout/Chapter";
 import Container from "@/components/layout/Container";
 import Button from "@/components/ui/Button";
 import ProofWalkthrough from "@/components/interactive/ProofWalkthrough";
+import Cite from "@/components/ui/Cite";
 
 export default function ProofSketch() {
   const [expanded, setExpanded] = useState(false);
@@ -16,8 +17,9 @@ export default function ProofSketch() {
         </h2>
 
         <p className="text-ink-secondary text-lg leading-relaxed mb-8 max-w-[48rem]">
-          The full proof is technical, but the core logic is elegant. Here is
-          the structure of Arrow's argument in four steps.
+          The full proof is technical, but the core logic is
+          elegant. <Cite id="geanakoplos-2005" /> Here is the structure of
+          Arrow's argument in four steps.
         </p>
 
         <div className="mb-8">
@@ -41,8 +43,10 @@ export default function ProofSketch() {
               <ProofWalkthrough />
 
               <p className="mt-8 text-sm text-ink-tertiary leading-relaxed max-w-[48rem]">
-                This is a simplified outline. Arrow's original 1951 paper
-                contains the complete formal proof.
+                This sketch follows the structure of
+                Geanakoplos's proof. <Cite id="geanakoplos-2005" /> Arrow's
+                original 1951 monograph contains the complete formal
+                proof. <Cite id="arrow-1951" />
               </p>
             </motion.div>
           )}

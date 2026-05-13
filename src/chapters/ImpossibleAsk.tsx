@@ -3,6 +3,7 @@ import Container from "@/components/layout/Container";
 import CriteriaCards from "@/components/interactive/CriteriaCards";
 import CriteriaCircle from "@/components/diagrams/CriteriaCircle";
 import ImpossibilitySandbox from "@/components/interactive/ImpossibilitySandbox";
+import Cite from "@/components/ui/Cite";
 
 const allSatisfied = [
   {
@@ -58,7 +59,7 @@ export default function ImpossibleAsk() {
         <p className="text-ink text-lg leading-relaxed mb-4">
           In 1951, Kenneth Arrow proved that no ranked voting system with three
           or more candidates can satisfy all four of these properties at the
-          same time.
+          same time. <Cite id="arrow-1951" />
         </p>
 
         <p className="text-ink-secondary leading-relaxed mb-10">
