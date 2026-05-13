@@ -10,10 +10,11 @@ import { checkPareto } from "@/lib/criteria/pareto";
 import { checkIIA } from "@/lib/criteria/iia";
 import { checkUnrestrictedDomain } from "@/lib/criteria/unrestricted";
 import { checkNonDictatorship } from "@/lib/criteria/dictatorship";
-import { plurality } from "@/lib/voting/plurality";
-import { borda } from "@/lib/voting/borda";
-import { irv } from "@/lib/voting/irv";
-import { condorcet } from "@/lib/voting/condorcet";
+import { plurality, pluralityWithDetails } from "@/lib/voting/plurality";
+import { borda, bordaWithDetails } from "@/lib/voting/borda";
+import { irv, irvWithDetails } from "@/lib/voting/irv";
+import { condorcet, condorcetWithDetails } from "@/lib/voting/condorcet";
+import type { VotingMethodWithDetails } from "@/lib/voting/types";
 import type { CriterionResult } from "@/lib/criteria/types";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
@@ -121,13 +122,14 @@ interface PresetDef {
   key: PresetKey;
   label: string;
   method: SocialWelfareFunction;
+  methodWithDetails: VotingMethodWithDetails;
 }
 
 const PRESETS: PresetDef[] = [
-  { key: "plurality", label: "Plurality", method: plurality },
-  { key: "borda", label: "Borda Count", method: borda },
-  { key: "irv", label: "Instant Runoff", method: irv },
-  { key: "condorcet", label: "Condorcet", method: condorcet },
+  { key: "plurality", label: "Plurality", method: plurality, methodWithDetails: pluralityWithDetails },
+  { key: "borda", label: "Borda Count", method: borda, methodWithDetails: bordaWithDetails },
+  { key: "irv", label: "Instant Runoff", method: irv, methodWithDetails: irvWithDetails },
+  { key: "condorcet", label: "Condorcet", method: condorcet, methodWithDetails: condorcetWithDetails },
 ];
 
 const ALL_RANKINGS = permutations(CANDIDATES);
@@ -488,11 +490,13 @@ function ProfileCard({
   index,
   selectedRanking,
   onSelectRanking,
+  isTied,
 }: {
   scenario: ProfileScenario;
   index: number;
   selectedRanking: Ranking | null;
   onSelectRanking: (ranking: Ranking) => void;
+  isTied: boolean;
 }) {
   return (
     <motion.div
@@ -512,7 +516,9 @@ function ProfileCard({
                 {scenario.description}
               </p>
             </div>
-            {selectedRanking ? (
+            {isTied ? (
+              <Badge variant="muted-red">Tie</Badge>
+            ) : selectedRanking ? (
               <Badge variant="sage">Set</Badge>
             ) : (
               <Badge variant="default">Open</Badge>
@@ -548,6 +554,11 @@ function ProfileCard({
               onChange={onSelectRanking}
               profileIndex={index}
             />
+            {isTied && (
+              <p className="text-xs text-muted-red mt-1.5 leading-snug">
+                Method produced a tie. Choose a resolution.
+              </p>
+            )}
           </div>
         </div>
       </Card>
@@ -580,15 +591,22 @@ function ProgressBar({ filled, total }: { filled: number; total: number }) {
 export default function ImpossibilitySandbox() {
   const [activePreset, setActivePreset] = useState<PresetKey | null>(null);
   const [userRankings, setUserRankings] = useState<Record<string, Ranking>>({});
+  const [tiedProfiles, setTiedProfiles] = useState<Set<string>>(new Set());
 
   const handlePreset = useCallback(
     (preset: PresetDef) => {
       const newRankings: Record<string, Ranking> = {};
+      const newTied = new Set<string>();
       for (const scenario of SCENARIOS) {
         const key = profileKey(scenario.profile);
-        newRankings[key] = preset.method(scenario.profile, CANDIDATES);
+        const result = preset.methodWithDetails(scenario.profile, CANDIDATES);
+        newRankings[key] = result.ranking;
+        if (result.tiedWinners) {
+          newTied.add(key);
+        }
       }
       setUserRankings(newRankings);
+      setTiedProfiles(newTied);
       setActivePreset(preset.key);
     },
     []
@@ -598,6 +616,12 @@ export default function ImpossibilitySandbox() {
     (scenarioProfile: PreferenceProfile, ranking: Ranking) => {
       const key = profileKey(scenarioProfile);
       setUserRankings((prev) => ({ ...prev, [key]: ranking }));
+      setTiedProfiles((prev) => {
+        if (!prev.has(key)) return prev;
+        const next = new Set(prev);
+        next.delete(key);
+        return next;
+      });
       setActivePreset(null);
     },
     []
@@ -643,9 +667,11 @@ export default function ImpossibilitySandbox() {
     <div className="space-y-8" role="region" aria-label="Impossibility Theorem Sandbox">
       <div className="space-y-3">
         <p className="text-sm text-ink-secondary leading-relaxed max-w-2xl">
-          Arrow's Impossibility Theorem says no voting rule for 3+ candidates can satisfy
-          all four fairness criteria at once. Try it yourself: pick a preset method or
-          define your own group rankings, then watch the criteria light up.
+          Arrow's theorem requires a voting rule that produces a strict ranking
+          (no ties) for every possible set of preferences. Pick a preset method
+          or define your own group rankings, then watch the criteria checker.
+          When a method produces a tie, you must choose a resolution to
+          complete the rule.
         </p>
       </div>
 
@@ -673,17 +699,21 @@ export default function ImpossibilitySandbox() {
           Preference profiles
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {SCENARIOS.map((scenario, index) => (
-            <ProfileCard
-              key={scenario.label}
-              scenario={scenario}
-              index={index}
-              selectedRanking={userRankings[profileKey(scenario.profile)] ?? null}
-              onSelectRanking={(ranking) =>
-                handleSetRanking(scenario.profile, ranking)
-              }
-            />
-          ))}
+          {SCENARIOS.map((scenario, index) => {
+            const key = profileKey(scenario.profile);
+            return (
+              <ProfileCard
+                key={scenario.label}
+                scenario={scenario}
+                index={index}
+                selectedRanking={userRankings[key] ?? null}
+                onSelectRanking={(ranking) =>
+                  handleSetRanking(scenario.profile, ranking)
+                }
+                isTied={tiedProfiles.has(key)}
+              />
+            );
+          })}
         </div>
       </div>
 
