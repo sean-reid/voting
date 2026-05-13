@@ -47,7 +47,7 @@ export default function CriteriaCircle({ criteria }: CriteriaCircleProps) {
   return (
     <svg
       viewBox="0 0 500 300"
-      className="w-full max-w-[500px] h-auto"
+      className="w-full max-w-[500px] h-auto mx-auto"
       role="img"
       aria-label="Criteria diagram"
     >

@@ -14,13 +14,13 @@ export const proofSteps: ProofStep[] = [
   {
     title: "Find the pivotal voter",
     content:
-      "Consider an election between two candidates, A and B. Start with all voters ranking B first. Then, one by one, move each voter to rank A first. At some point, the group outcome switches from B to A. The voter whose switch causes this change is the pivotal voter for the pair (A, B).",
+      "With three or more candidates, start with every voter ranking some candidate B last. By unanimity, society ranks B last too. Then, one by one, move each voter's ranking of B from last to first. At some point, B jumps from the bottom to the top of the social ranking. The voter whose switch causes this jump is the pivotal voter.",
     diagramType: "pivotal",
   },
   {
     title: "The pivotal voter has too much power",
     content:
-      "Using the IIA criterion, we can show that this pivotal voter determines the outcome for every pair of candidates, not just A and B. Their individual preference always matches the group outcome.",
+      "Using IIA and unanimity together, we can show that this pivotal voter determines the social ranking for every pair of candidates, not just those involving B. Place B between any two other candidates A and C in the pivotal voter's ranking while other voters place B at an extreme. IIA and unanimity force A above B and B above C socially. Since A and C were arbitrary, the pivotal voter controls every comparison.",
     diagramType: "dictator",
   },
   {

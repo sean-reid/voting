@@ -151,13 +151,13 @@ function PivotalDiagram() {
       viewBox="0 0 400 300"
       className="w-full max-w-md mx-auto"
       role="img"
-      aria-label="Five voters in a row. Voter 3 is the pivotal voter, highlighted in terracotta. Voters 1 and 2 prefer B over A, voters 4 and 5 prefer A over B."
+      aria-label="Five voters in a row. Voter 3 is the pivotal voter, highlighted in terracotta. Voters 1 and 2 rank B first, voters 4 and 5 rank B last."
     >
       {voters.map((v, i) => {
         const x = 56 + i * 72;
         const y = 100;
         const isPivotal = i === pivotalIndex;
-        const prefersB = i < pivotalIndex;
+        const movedB = i <= pivotalIndex;
 
         return (
           <motion.g
@@ -221,11 +221,11 @@ function PivotalDiagram() {
                 height={20}
                 rx={6}
                 className={
-                  prefersB
-                    ? "fill-sage/15"
-                    : isPivotal
+                  movedB
+                    ? isPivotal
                       ? "fill-terracotta/15"
-                      : "fill-terracotta/10"
+                      : "fill-sage/15"
+                    : "fill-surface-hover"
                 }
               />
               <text
@@ -233,17 +233,17 @@ function PivotalDiagram() {
                 y={y + 46}
                 textAnchor="middle"
                 className={
-                  prefersB
-                    ? "fill-sage-dark"
-                    : isPivotal
+                  movedB
+                    ? isPivotal
                       ? "fill-terracotta-dark"
-                      : "fill-terracotta"
+                      : "fill-sage-dark"
+                    : "fill-ink-tertiary"
                 }
                 fontSize="10"
                 fontFamily="var(--font-sans)"
                 fontWeight="600"
               >
-                {prefersB ? "B > A" : "A > B"}
+                {movedB ? "B 1st" : "B last"}
               </text>
             </motion.g>
 
@@ -291,7 +291,7 @@ function PivotalDiagram() {
           fontFamily="var(--font-sans)"
           fontWeight="500"
         >
-          Outcome: B wins
+          B ranked last
         </text>
       </motion.g>
 
@@ -334,7 +334,7 @@ function PivotalDiagram() {
           fontFamily="var(--font-sans)"
           fontWeight="500"
         >
-          Outcome: A wins
+          B ranked first
         </text>
       </motion.g>
 
@@ -350,7 +350,7 @@ function PivotalDiagram() {
         animate={{ opacity: 1 }}
         transition={{ delay: 1.6, duration: 0.4 }}
       >
-        Voter 3 flips the result
+        Voter 3's switch flips B from bottom to top
       </motion.text>
 
       <defs>
