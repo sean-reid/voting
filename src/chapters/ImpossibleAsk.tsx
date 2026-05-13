@@ -41,7 +41,7 @@ const circleCriteria = [
 export default function ImpossibleAsk() {
   return (
     <Chapter id="impossibility">
-      <Container wide>
+      <Container>
         <h2 className="font-serif text-3xl font-semibold text-ink mb-4 md:text-4xl">
           The impossibility
         </h2>
@@ -68,16 +68,16 @@ export default function ImpossibleAsk() {
           around it.
         </p>
 
-        <div className="flex justify-center mb-12">
-          <CriteriaCircle criteria={circleCriteria} />
-        </div>
+        <CriteriaCircle criteria={circleCriteria} />
 
-        <p className="text-ink-secondary leading-relaxed mb-8">
+        <p className="text-ink-secondary leading-relaxed mt-12 mb-8">
           Try building a voting rule yourself. Choose how each preference
           profile should be resolved. The checker will test your rule against
           all four criteria.
         </p>
+      </Container>
 
+      <Container wide>
         <ImpossibilitySandbox />
       </Container>
     </Chapter>

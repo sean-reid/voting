@@ -39,7 +39,7 @@ function VotingSimulator({ profile, candidates, methods }: VotingSimulatorProps)
             <Card key={entry.name} hover>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-serif text-base font-semibold text-ink">
+                  <h3 className="text-base font-semibold text-ink">
                     {entry.name}
                   </h3>
                 </div>

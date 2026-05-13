@@ -428,7 +428,7 @@ function CriterionCard({
       aria-label={`${criterion.name}: ${status}`}
     >
       <div className="flex items-start justify-between gap-3">
-        <h3 className="font-serif text-sm font-semibold text-ink leading-snug">
+        <h3 className="text-sm font-semibold text-ink leading-snug">
           {criterion.name}
         </h3>
         <AnimatePresence mode="wait">
@@ -505,7 +505,7 @@ function ProfileCard({
         <div className="space-y-3 h-full flex flex-col">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
-              <h3 className="font-serif text-sm font-semibold text-ink leading-snug">
+              <h3 className="text-sm font-semibold text-ink leading-snug">
                 {scenario.label}
               </h3>
               <p className="text-xs text-ink-tertiary mt-0.5 leading-snug">

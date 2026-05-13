@@ -44,7 +44,7 @@ function ElectionPanel({ title, voters, candidates, highlight }: PanelProps) {
   return (
     <Card>
       <div className="space-y-4">
-        <h3 className="font-serif text-base font-semibold text-ink">{title}</h3>
+        <h3 className="text-base font-semibold text-ink">{title}</h3>
         <div className="space-y-1.5">
           <p className="text-xs font-medium text-ink-tertiary uppercase tracking-wider">
             Preferences

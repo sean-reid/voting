@@ -57,7 +57,7 @@ function MobileCards() {
           transition={{ duration: 0.3, delay: i * 0.05 }}
           className="rounded-lg border border-border bg-surface p-4 space-y-3"
         >
-          <span className="font-serif font-semibold text-ink text-sm">
+          <span className="font-semibold text-ink text-sm">
             {method.name}
           </span>
           {method.note && (
@@ -85,13 +85,13 @@ function DesktopTable() {
       <table className="w-full text-sm border-collapse">
         <thead>
           <tr className="border-b border-border-strong">
-            <th className="text-left py-3 pr-4 font-serif font-semibold text-ink">
+            <th className="text-left py-3 pr-4 font-semibold text-ink">
               Method
             </th>
             {criteriaHeaders.map((h) => (
               <th
                 key={h.key}
-                className="py-3 px-3 text-center font-serif font-semibold text-ink whitespace-nowrap"
+                className="py-3 px-3 text-center font-semibold text-ink whitespace-nowrap"
               >
                 {h.label}
               </th>
