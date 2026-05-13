@@ -1,6 +1,5 @@
 import { motion } from "motion/react";
 import { votingMethodsInfo } from "@/data/votingMethods";
-import Badge from "@/components/ui/Badge";
 
 const criteriaHeaders = [
   { key: "unrestricted" as const, label: "Unrestricted Domain" },
@@ -47,14 +46,42 @@ function XMark() {
   );
 }
 
-export default function ComparisonMatrix() {
+function MobileCards() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
-      className="overflow-x-auto"
-    >
+    <div className="space-y-3 md:hidden">
+      {votingMethodsInfo.map((method, i) => (
+        <motion.div
+          key={method.id}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: i * 0.05 }}
+          className="rounded-lg border border-border bg-surface p-4 space-y-3"
+        >
+          <span className="font-serif font-semibold text-ink text-sm">
+            {method.name}
+          </span>
+          {method.note && (
+            <p className="text-xs text-muted-red leading-snug">
+              {method.note}
+            </p>
+          )}
+          <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+            {criteriaHeaders.map((h) => (
+              <div key={h.key} className="flex items-center gap-1.5">
+                {method.satisfies[h.key] ? <CheckMark /> : <XMark />}
+                <span className="text-xs text-ink-secondary">{h.label}</span>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+function DesktopTable() {
+  return (
+    <div className="hidden md:block overflow-x-auto">
       <table className="w-full text-sm border-collapse">
         <thead>
           <tr className="border-b border-border-strong">
@@ -84,7 +111,9 @@ export default function ComparisonMatrix() {
                 <div className="flex flex-col gap-1">
                   <span className="font-medium text-ink">{method.name}</span>
                   {method.note && (
-                    <Badge variant="muted-red">{method.note}</Badge>
+                    <p className="text-xs text-muted-red leading-snug rounded-md bg-muted-red/8 px-2 py-1.5 max-w-[24rem]">
+                      {method.note}
+                    </p>
                   )}
                 </div>
               </td>
@@ -99,6 +128,19 @@ export default function ComparisonMatrix() {
           ))}
         </tbody>
       </table>
+    </div>
+  );
+}
+
+export default function ComparisonMatrix() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
+      <MobileCards />
+      <DesktopTable />
     </motion.div>
   );
 }
